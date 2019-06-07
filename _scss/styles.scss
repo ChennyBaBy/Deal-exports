@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+body {
+  font-family: "Gotham", "Montserrat", "Roboto", verdana, sans-serif;
+  background: #f2f2f2;
+}
+
+.sidebar {
+  width: 100%;
+  position: fixed;
+  height: 100%;
+  overflow-y: scroll;
+  left:0;
+  top: 0;
+  background: #fff;
+  border-right: 1px solid #e5e5e5;
+  z-index: 1000;
+  padding: 12px 14px;
+
+  @media(min-width: 992px) {
+    width: 20%;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 12px;
+  }
+
+  &__toggle {
+    z-index: 1000;
+    position: fixed;
+    font-size: 20px;
+    top: 12px;
+    left: 14px;
+  }
+
+  .saved {
+    &__deal {
+      position: relative;
+  
+      .deleteDeal {
+        position: absolute;
+        right: 14px;
+        top: 12px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+.badge {
+  background: #e5e5e5;
+  border-radius: 3px;
+  padding: 6px 7px;
+  color: #fff;
+  text-decoration: none;
+
+  &:hover {
+    color: #fff;
+  }
+
+  &-dark {
+    background-color: #2d3737;
+  }
+
+  &-info {
+    background-color: #00A1E0;
+  }
+
+  &-primary {
+    background-color: #87189D;
+  }
+}
+.select {
+  label {
+    display: inline;
+  }
+
+  .ch-form__control {
+    display: inline;
+    width: 100px;
+    margin-left: 14px;
+  }
+}
+
+.generate-links {
+  background: white;
+  width: 100%;
+  padding: 24px;
+  position: sticky;
+  bottom: 0;
+  text-align: center;
+
+  .btn {
+    display: inline;
+    margin-right: 7px;
+  }
+}
+
+
+.ch-form__group {
+  margin-bottom: 24px;
+}
