@@ -18,6 +18,10 @@ body {
   padding: 12px 14px;
 
   @media(min-width: 992px) {
+    width: 25%;
+  }
+
+  @media(min-width: 1200px) {
     width: 20%;
   }
 

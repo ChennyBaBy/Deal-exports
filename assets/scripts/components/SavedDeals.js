@@ -8,8 +8,6 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _functions = require("./functions");
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -22,9 +20,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -41,7 +39,6 @@ function (_Component) {
     _classCallCheck(this, SavedDeals);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SavedDeals).call(this, props));
-    _this.refreshDeals = _this.refreshDeals.bind(_assertThisInitialized(_this));
     _this.jsonButton = _react["default"].createRef();
     _this.csvButton = _react["default"].createRef();
     _this.htmlButton = _react["default"].createRef();
@@ -50,22 +47,13 @@ function (_Component) {
     };
     return _this;
   }
+  /* Download button functions */
+
 
   _createClass(SavedDeals, [{
-    key: "refreshDeals",
-    value: function refreshDeals() {
-      if (_functions.checkCookie) {
-        this.setState({
-          dealString: (0, _functions.getCookie)("deals")
-        });
-      }
-    }
-    /* Download button functions */
-
-  }, {
     key: "DownloadJSON2CSV",
     value: function DownloadJSON2CSV(objArray) {
-      var array = _typeof(objArray) != "object" ? JSON.parse(objArray) : objArray;
+      var array = _typeof(objArray) != "object" ? objArray : objArray;
       var str = "Name, Spec, C02, MPG, Image, Monthly, Deposit, Months, USP" + "\r\n";
 
       for (var i = 0; i < array.length; i++) {
@@ -88,7 +76,7 @@ function (_Component) {
   }, {
     key: "createDownloadJSONButton",
     value: function createDownloadJSONButton(data) {
-      var blob = new Blob([data], {
+      var blob = new Blob([JSON.stringify(data)], {
         type: "application/json"
       });
       var url = URL.createObjectURL(blob);
@@ -97,11 +85,10 @@ function (_Component) {
   }, {
     key: "downloadHTML",
     value: function downloadHTML(data) {
-      console.log(data);
       var htmlurl = "#";
 
-      if (this.state.dealString) {
-        data = JSON.parse(data);
+      if (this.props.saved) {
+        data = data;
         var str = "";
 
         for (var i = 0; i < data.length; i++) {
@@ -111,19 +98,9 @@ function (_Component) {
         var htmlblob = new Blob([str], {
           type: "text/html"
         });
-
-        var _htmlurl = URL.createObjectURL(htmlblob);
-
-        return _htmlurl;
+        htmlurl = URL.createObjectURL(htmlblob);
+        return htmlurl;
       }
-    }
-  }, {
-    key: "deleteDeal",
-    value: function deleteDeal(i) {
-      var deals = JSON.parse(this.state.dealString);
-      deals.splice(i, 1);
-      JSON.stringify(deals);
-      (0, _functions.setCookie)("deals", deals, 15); // this.refreshDeals
     }
   }, {
     key: "renderBlocks",
@@ -132,10 +109,12 @@ function (_Component) {
 
       var deals;
 
-      if (!this.state.dealString) {
-        deals = "Add some deals";
+      if (this.props.saved.length == 0) {
+        deals = _react["default"].createElement("p", {
+          className: "ch-mv--2"
+        }, "Add some deals");
       } else {
-        var savedDeals = JSON.parse(this.state.dealString);
+        var savedDeals = this.props.saved;
         this.createDownloadJSONButton(savedDeals);
         deals = savedDeals.map(function (deal, index) {
           return _react["default"].createElement("div", {
@@ -145,7 +124,9 @@ function (_Component) {
             className: "ch-mb--4 ch-ba--1 ch-bc--grey-3 ch-rounded ch-pa--2 sm:ch-pa--4 ch-bg--grey-1 ch-mv--2"
           }, _react["default"].createElement("i", {
             className: "deleteDeal fa fa-close ch-color--ac-magenta",
-            onClick: _this2.deleteDeal(index)
+            onClick: function onClick() {
+              return _this2.props["delete"](index);
+            }
           }), _react["default"].createElement("h3", null, deal.Name), _react["default"].createElement("p", {
             className: "ch-pb--0"
           }, deal.Spec)));
@@ -157,26 +138,28 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("p", {
-        className: "ch-text--right ch-color--ac-teal ch-hand ch-mt--2",
-        onClick: this.refreshDeals
-      }, "Refresh"), this.renderBlocks(), this.state.dealString && _react["default"].createElement("div", {
+      return _react["default"].createElement(_react["default"].Fragment, null, this.props.saved.length > 0 && _react["default"].createElement("p", {
+        className: "ch-mv--2 ch-text--right"
+      }, _react["default"].createElement("button", {
+        className: "ch-btn ch-btn--link",
+        onClick: this.props.clearAll
+      }, "Clear all")), this.renderBlocks(), this.props.saved.length > 0 && _react["default"].createElement("div", {
         className: "ch-bt--1 ch-bc--grey-3 ch-mt--3 ch-pt--2"
       }, _react["default"].createElement("a", {
         ref: this.jsonButton,
-        href: this.createDownloadJSONButton(this.state.dealString),
+        href: this.createDownloadJSONButton(this.props.saved),
         id: "genJSON",
         className: "ch-mb--2 ch-btn ch-btn--success ch-display--block ch-text--center",
         download: "affinity-deals.json"
       }, "Generate JSON"), _react["default"].createElement("a", {
         ref: this.csvButton,
-        href: this.DownloadJSON2CSV(this.state.dealString),
+        href: this.DownloadJSON2CSV(this.props.saved),
         id: "genCSV",
         className: "ch-mb--2 ch-btn ch-btn--secondary ch-display--block ch-text--center",
         download: "affinity-deals.csv"
       }, "Generate CSV"), _react["default"].createElement("a", {
         ref: this.htmlButton,
-        href: this.downloadHTML(this.state.dealString),
+        href: this.downloadHTML(this.props.saved),
         id: "genEmail",
         className: " ch-btn ch-btn--primary ch-display--block ch-text--center",
         download: "affinity-deals.html"
@@ -190,50 +173,7 @@ function (_Component) {
 var _default = SavedDeals;
 exports["default"] = _default;
 
-},{"./functions":2,"react":9}],2:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.checkCookie = checkCookie;
-exports.getCookie = getCookie;
-exports.setCookie = setCookie;
-
-function checkCookie() {
-  var deals = getCookie("deals");
-  var cookieCheck = deals.length > 0 ? true : false;
-  return cookieCheck;
-}
-
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-
-  return "";
-}
-
-function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  var expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-},{}],3:[function(require,module,exports){
+},{"react":8}],2:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -325,7 +265,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -511,7 +451,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -618,7 +558,7 @@ module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
 
-},{"./lib/ReactPropTypesSecret":6,"_process":4}],6:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":5,"_process":3}],5:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -632,7 +572,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process){
 /** @license React v16.8.6
  * react.development.js
@@ -2538,7 +2478,7 @@ module.exports = react;
 
 }).call(this,require('_process'))
 
-},{"_process":4,"object-assign":3,"prop-types/checkPropTypes":5}],8:[function(require,module,exports){
+},{"_process":3,"object-assign":2,"prop-types/checkPropTypes":4}],7:[function(require,module,exports){
 /** @license React v16.8.6
  * react.production.min.js
  *
@@ -2565,7 +2505,7 @@ b,d){return W().useImperativeHandle(a,b,d)},useDebugValue:function(){},useLayout
 b){void 0!==b.ref&&(h=b.ref,f=J.current);void 0!==b.key&&(g=""+b.key);var l=void 0;a.type&&a.type.defaultProps&&(l=a.type.defaultProps);for(c in b)K.call(b,c)&&!L.hasOwnProperty(c)&&(e[c]=void 0===b[c]&&void 0!==l?l[c]:b[c])}c=arguments.length-2;if(1===c)e.children=d;else if(1<c){l=Array(c);for(var m=0;m<c;m++)l[m]=arguments[m+2];e.children=l}return{$$typeof:p,type:a.type,key:g,ref:h,props:e,_owner:f}},createFactory:function(a){var b=M.bind(null,a);b.type=a;return b},isValidElement:N,version:"16.8.6",
 unstable_ConcurrentMode:x,unstable_Profiler:u,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentDispatcher:I,ReactCurrentOwner:J,assign:k}},Y={default:X},Z=Y&&X||Y;module.exports=Z.default||Z;
 
-},{"object-assign":3}],9:[function(require,module,exports){
+},{"object-assign":2}],8:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2577,5 +2517,5 @@ if (process.env.NODE_ENV === 'production') {
 
 }).call(this,require('_process'))
 
-},{"./cjs/react.development.js":7,"./cjs/react.production.min.js":8,"_process":4}]},{},[1])
+},{"./cjs/react.development.js":6,"./cjs/react.production.min.js":7,"_process":3}]},{},[1])
 

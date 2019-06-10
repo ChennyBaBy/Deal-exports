@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { setCookie, getCookie, checkCookie } from './functions';
 
 class SavedDeals extends Component {
   constructor(props) {
     super(props);
-    this.refreshDeals = this.refreshDeals.bind(this);
     this.jsonButton = React.createRef();
     this.csvButton = React.createRef();
     this.htmlButton = React.createRef();
@@ -13,17 +11,9 @@ class SavedDeals extends Component {
     };
   }
 
-  refreshDeals() {
-    if (checkCookie) {
-      this.setState({
-        dealString: getCookie("deals")
-      });
-    }
-  }
-
   /* Download button functions */
   DownloadJSON2CSV(objArray) {
-    let array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+    let array = typeof objArray != "object" ? objArray : objArray;
     let str =
       "Name, Spec, C02, MPG, Image, Monthly, Deposit, Months, USP" + "\r\n";
 
@@ -46,7 +36,8 @@ class SavedDeals extends Component {
   }
 
   createDownloadJSONButton(data) {
-    let blob = new Blob([data], {
+
+    let blob = new Blob([JSON.stringify(data)], {
       type: "application/json"
     });
     let url = URL.createObjectURL(blob);
@@ -55,10 +46,9 @@ class SavedDeals extends Component {
   }
 
   downloadHTML(data) {
-    console.log(data)
     let htmlurl = "#"
-    if (this.state.dealString) {
-      data = JSON.parse(data);
+    if (this.props.saved) {
+      data = data;
       let str = ``;
       for (let i = 0; i < data.length; i++) {
         str += `
@@ -148,31 +138,25 @@ class SavedDeals extends Component {
       let htmlblob = new Blob([str], {
         type: "text/html"
       });
-      let htmlurl = URL.createObjectURL(htmlblob);
+      htmlurl = URL.createObjectURL(htmlblob);
 
       return htmlurl;
     }
   }
 
-  deleteDeal(i) {
-    let deals = JSON.parse(this.state.dealString)
-    deals.splice(i, 1);
-    JSON.stringify(deals)
-    setCookie("deals", deals, 15)
-    // this.refreshDeals
-  }
+  
 
   renderBlocks() {
     let deals;
-    if (!this.state.dealString) {
-      deals = "Add some deals";
+    if (this.props.saved.length == 0) {
+      deals = <p className="ch-mv--2">Add some deals</p>;
     } else {
-      const savedDeals = JSON.parse(this.state.dealString);
+      const savedDeals = this.props.saved;
       this.createDownloadJSONButton(savedDeals);
       deals = savedDeals.map((deal, index) => (
         <div className="saved__deal" key={index}>
           <div className="ch-mb--4 ch-ba--1 ch-bc--grey-3 ch-rounded ch-pa--2 sm:ch-pa--4 ch-bg--grey-1 ch-mv--2">
-            <i className="deleteDeal fa fa-close ch-color--ac-magenta" onClick={this.deleteDeal(index)} />
+            <i className="deleteDeal fa fa-close ch-color--ac-magenta" onClick={() => this.props.delete(index)} />
             <h3>{deal.Name}</h3>
             <p className="ch-pb--0">{deal.Spec}</p>
           </div>
@@ -185,18 +169,17 @@ class SavedDeals extends Component {
   render() {
     return (
       <>
-        <p
-          className="ch-text--right ch-color--ac-teal ch-hand ch-mt--2"
-          onClick={this.refreshDeals}
-        >
-          Refresh
-        </p>
+        {this.props.saved.length > 0 &&
+          <p className="ch-mv--2 ch-text--right">
+            <button className="ch-btn ch-btn--link" onClick={this.props.clearAll}>Clear all</button>
+          </p>
+        }
         {this.renderBlocks()}
-        {this.state.dealString && (
+        {this.props.saved.length > 0 && (
           <div className="ch-bt--1 ch-bc--grey-3 ch-mt--3 ch-pt--2">
             <a
               ref={this.jsonButton}
-              href={this.createDownloadJSONButton(this.state.dealString)}
+              href={this.createDownloadJSONButton(this.props.saved)}
               id="genJSON"
               className="ch-mb--2 ch-btn ch-btn--success ch-display--block ch-text--center"
               download="affinity-deals.json"
@@ -205,7 +188,7 @@ class SavedDeals extends Component {
             </a>
             <a
               ref={this.csvButton}
-              href={this.DownloadJSON2CSV(this.state.dealString)}
+              href={this.DownloadJSON2CSV(this.props.saved)}
               id="genCSV"
               className="ch-mb--2 ch-btn ch-btn--secondary ch-display--block ch-text--center"
               download="affinity-deals.csv"
@@ -214,7 +197,7 @@ class SavedDeals extends Component {
             </a>
             <a
               ref={this.htmlButton}
-              href={this.downloadHTML(this.state.dealString)}
+              href={this.downloadHTML(this.props.saved)}
               id="genEmail"
               className=" ch-btn ch-btn--primary ch-display--block ch-text--center"
               download="affinity-deals.html"

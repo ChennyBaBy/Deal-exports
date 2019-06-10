@@ -8,7 +8,9 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _functions = require("./functions");
+var _SavedDeals = _interopRequireDefault(require("./SavedDeals"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
@@ -22,42 +24,48 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var Data =
+var Deals =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(Data, _Component);
+  _inherits(Deals, _Component);
 
-  function Data(props) {
+  function Deals(props) {
     var _this2;
 
-    _classCallCheck(this, Data);
+    _classCallCheck(this, Deals);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Data).call(this, props));
-    document.cookie = "deals=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Deals).call(this, props));
+    _this2.clearAll = _this2.clearAll.bind(_assertThisInitialized(_this2));
+    _this2.deleteDeal = _this2.deleteDeal.bind(_assertThisInitialized(_this2));
+    _this2.state = {
+      dealString: []
+    };
     return _this2;
   }
 
-  _createClass(Data, [{
+  _createClass(Deals, [{
     key: "saveDeal",
     value: function saveDeal() {
       var inputs = document.querySelectorAll("input");
       var value;
 
-      if ((0, _functions.checkCookie)()) {
-        value = (0, _functions.getCookie)("deals").slice(0, -1) + ", " + this.state.dealString.slice(1, this.state.dealString.length);
+      if (this.state.dealString) {
+        value = this.state.dealString.concat(this.state.deal);
       } else {
-        value = this.state.dealString;
+        value = this.state.deal;
       }
 
-      (0, _functions.setCookie)("deals", value, 15);
+      this.setState({
+        dealString: value
+      });
 
       for (var i = 0; i < inputs.length; i++) {
         inputs[i].value = "";
@@ -88,9 +96,7 @@ function (_Component) {
           });
 
           _this.setState({
-            inputTrue: true,
-            deal: data,
-            dealString: JSON.stringify(data)
+            deal: data
           });
         });
       }
@@ -224,9 +230,45 @@ function (_Component) {
       return blks;
     }
   }, {
+    key: "clearAll",
+    value: function clearAll() {
+      this.setState({
+        dealString: []
+      });
+    }
+  }, {
+    key: "deleteDeal",
+    value: function deleteDeal(i) {
+      var deals = this.state.dealString;
+      deals.splice(i, 1);
+      this.setState({
+        dealString: deals
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+        className: "sidebar__toggle"
+      }, _react["default"].createElement("button", {
+        className: "ch-btn"
+      }, "Menu ", _react["default"].createElement("i", {
+        className: "fa fa-bars"
+      }))), _react["default"].createElement("div", {
+        className: "sidebar ch-display--none"
+      }, _react["default"].createElement("div", {
+        className: "sidebar__header"
+      }, _react["default"].createElement("h3", {
+        className: "ch-mb--0"
+      }, "Menu"), _react["default"].createElement("button", {
+        className: "ch-btn ch-btn--sm"
+      }, "Close ", _react["default"].createElement("i", {
+        className: "fa fa-close"
+      }))), _react["default"].createElement(_SavedDeals["default"], {
+        saved: this.state.dealString,
+        clearAll: this.clearAll,
+        "delete": this.deleteDeal
+      })), _react["default"].createElement("div", {
         className: "form"
       }, _react["default"].createElement("div", {
         className: "ch-container"
@@ -236,13 +278,13 @@ function (_Component) {
     }
   }]);
 
-  return Data;
+  return Deals;
 }(_react.Component);
 
-var _default = Data;
+var _default = Deals;
 exports["default"] = _default;
 
-},{"./functions":3,"react":14}],2:[function(require,module,exports){
+},{"./SavedDeals":2,"react":13}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -251,8 +293,6 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
-
-var _functions = require("./functions");
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
@@ -266,9 +306,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -285,7 +325,6 @@ function (_Component) {
     _classCallCheck(this, SavedDeals);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SavedDeals).call(this, props));
-    _this.refreshDeals = _this.refreshDeals.bind(_assertThisInitialized(_this));
     _this.jsonButton = _react["default"].createRef();
     _this.csvButton = _react["default"].createRef();
     _this.htmlButton = _react["default"].createRef();
@@ -294,22 +333,13 @@ function (_Component) {
     };
     return _this;
   }
+  /* Download button functions */
+
 
   _createClass(SavedDeals, [{
-    key: "refreshDeals",
-    value: function refreshDeals() {
-      if (_functions.checkCookie) {
-        this.setState({
-          dealString: (0, _functions.getCookie)("deals")
-        });
-      }
-    }
-    /* Download button functions */
-
-  }, {
     key: "DownloadJSON2CSV",
     value: function DownloadJSON2CSV(objArray) {
-      var array = _typeof(objArray) != "object" ? JSON.parse(objArray) : objArray;
+      var array = _typeof(objArray) != "object" ? objArray : objArray;
       var str = "Name, Spec, C02, MPG, Image, Monthly, Deposit, Months, USP" + "\r\n";
 
       for (var i = 0; i < array.length; i++) {
@@ -332,7 +362,7 @@ function (_Component) {
   }, {
     key: "createDownloadJSONButton",
     value: function createDownloadJSONButton(data) {
-      var blob = new Blob([data], {
+      var blob = new Blob([JSON.stringify(data)], {
         type: "application/json"
       });
       var url = URL.createObjectURL(blob);
@@ -341,11 +371,10 @@ function (_Component) {
   }, {
     key: "downloadHTML",
     value: function downloadHTML(data) {
-      console.log(data);
       var htmlurl = "#";
 
-      if (this.state.dealString) {
-        data = JSON.parse(data);
+      if (this.props.saved) {
+        data = data;
         var str = "";
 
         for (var i = 0; i < data.length; i++) {
@@ -355,19 +384,9 @@ function (_Component) {
         var htmlblob = new Blob([str], {
           type: "text/html"
         });
-
-        var _htmlurl = URL.createObjectURL(htmlblob);
-
-        return _htmlurl;
+        htmlurl = URL.createObjectURL(htmlblob);
+        return htmlurl;
       }
-    }
-  }, {
-    key: "deleteDeal",
-    value: function deleteDeal(i) {
-      var deals = JSON.parse(this.state.dealString);
-      deals.splice(i, 1);
-      JSON.stringify(deals);
-      (0, _functions.setCookie)("deals", deals, 15); // this.refreshDeals
     }
   }, {
     key: "renderBlocks",
@@ -376,10 +395,12 @@ function (_Component) {
 
       var deals;
 
-      if (!this.state.dealString) {
-        deals = "Add some deals";
+      if (this.props.saved.length == 0) {
+        deals = _react["default"].createElement("p", {
+          className: "ch-mv--2"
+        }, "Add some deals");
       } else {
-        var savedDeals = JSON.parse(this.state.dealString);
+        var savedDeals = this.props.saved;
         this.createDownloadJSONButton(savedDeals);
         deals = savedDeals.map(function (deal, index) {
           return _react["default"].createElement("div", {
@@ -389,7 +410,9 @@ function (_Component) {
             className: "ch-mb--4 ch-ba--1 ch-bc--grey-3 ch-rounded ch-pa--2 sm:ch-pa--4 ch-bg--grey-1 ch-mv--2"
           }, _react["default"].createElement("i", {
             className: "deleteDeal fa fa-close ch-color--ac-magenta",
-            onClick: _this2.deleteDeal(index)
+            onClick: function onClick() {
+              return _this2.props["delete"](index);
+            }
           }), _react["default"].createElement("h3", null, deal.Name), _react["default"].createElement("p", {
             className: "ch-pb--0"
           }, deal.Spec)));
@@ -401,26 +424,28 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("p", {
-        className: "ch-text--right ch-color--ac-teal ch-hand ch-mt--2",
-        onClick: this.refreshDeals
-      }, "Refresh"), this.renderBlocks(), this.state.dealString && _react["default"].createElement("div", {
+      return _react["default"].createElement(_react["default"].Fragment, null, this.props.saved.length > 0 && _react["default"].createElement("p", {
+        className: "ch-mv--2 ch-text--right"
+      }, _react["default"].createElement("button", {
+        className: "ch-btn ch-btn--link",
+        onClick: this.props.clearAll
+      }, "Clear all")), this.renderBlocks(), this.props.saved.length > 0 && _react["default"].createElement("div", {
         className: "ch-bt--1 ch-bc--grey-3 ch-mt--3 ch-pt--2"
       }, _react["default"].createElement("a", {
         ref: this.jsonButton,
-        href: this.createDownloadJSONButton(this.state.dealString),
+        href: this.createDownloadJSONButton(this.props.saved),
         id: "genJSON",
         className: "ch-mb--2 ch-btn ch-btn--success ch-display--block ch-text--center",
         download: "affinity-deals.json"
       }, "Generate JSON"), _react["default"].createElement("a", {
         ref: this.csvButton,
-        href: this.DownloadJSON2CSV(this.state.dealString),
+        href: this.DownloadJSON2CSV(this.props.saved),
         id: "genCSV",
         className: "ch-mb--2 ch-btn ch-btn--secondary ch-display--block ch-text--center",
         download: "affinity-deals.csv"
       }, "Generate CSV"), _react["default"].createElement("a", {
         ref: this.htmlButton,
-        href: this.downloadHTML(this.state.dealString),
+        href: this.downloadHTML(this.props.saved),
         id: "genEmail",
         className: " ch-btn ch-btn--primary ch-display--block ch-text--center",
         download: "affinity-deals.html"
@@ -434,50 +459,7 @@ function (_Component) {
 var _default = SavedDeals;
 exports["default"] = _default;
 
-},{"./functions":3,"react":14}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.checkCookie = checkCookie;
-exports.getCookie = getCookie;
-exports.setCookie = setCookie;
-
-function checkCookie() {
-  var deals = getCookie("deals");
-  var cookieCheck = deals.length > 0 ? true : false;
-  return cookieCheck;
-}
-
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-
-  return "";
-}
-
-function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  var expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-},{}],4:[function(require,module,exports){
+},{"react":13}],3:[function(require,module,exports){
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -486,16 +468,11 @@ var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _Deals = _interopRequireDefault(require("./components/Deals"));
 
-var _SavedDeals = _interopRequireDefault(require("./components/SavedDeals"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var dataBox = document.getElementById("data-box");
-var savedDeals = document.getElementById("saved");
 
 _reactDom["default"].render(_react["default"].createElement(_Deals["default"], null), dataBox);
-
-_reactDom["default"].render(_react["default"].createElement(_SavedDeals["default"], null), savedDeals);
 
 var menuToggle = document.querySelector(".sidebar__toggle");
 var menuClose = document.querySelector(".sidebar__header .ch-btn");
@@ -507,7 +484,7 @@ menuClose.addEventListener("click", function () {
   sidebar.classList.toggle("ch-display--none");
 });
 
-},{"./components/Deals":1,"./components/SavedDeals":2,"react":14,"react-dom":11}],5:[function(require,module,exports){
+},{"./components/Deals":1,"react":13,"react-dom":10}],4:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -599,7 +576,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -785,7 +762,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -892,7 +869,7 @@ module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
 
-},{"./lib/ReactPropTypesSecret":8,"_process":6}],8:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":7,"_process":5}],7:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -906,7 +883,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function (process){
 /** @license React v16.8.6
  * react-dom.development.js
@@ -22189,7 +22166,7 @@ module.exports = reactDom;
 
 }).call(this,require('_process'))
 
-},{"_process":6,"object-assign":5,"prop-types/checkPropTypes":7,"react":14,"scheduler":19,"scheduler/tracing":20}],10:[function(require,module,exports){
+},{"_process":5,"object-assign":4,"prop-types/checkPropTypes":6,"react":13,"scheduler":18,"scheduler/tracing":19}],9:[function(require,module,exports){
 /** @license React v16.8.6
  * react-dom.production.min.js
  *
@@ -22460,7 +22437,7 @@ x("38"):void 0;return Si(a,b,c,!1,d)},unmountComponentAtNode:function(a){Qi(a)?v
 X;X=!0;try{ki(a)}finally{(X=b)||W||Yh(1073741823,!1)}},__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{Events:[Ia,Ja,Ka,Ba.injectEventPluginsByName,pa,Qa,function(a){ya(a,Pa)},Eb,Fb,Dd,Da]}};function Ui(a,b){Qi(a)?void 0:x("299","unstable_createRoot");return new Pi(a,!0,null!=b&&!0===b.hydrate)}
 (function(a){var b=a.findFiberByHostInstance;return Te(n({},a,{overrideProps:null,currentDispatcherRef:Tb.ReactCurrentDispatcher,findHostInstanceByFiber:function(a){a=hd(a);return null===a?null:a.stateNode},findFiberByHostInstance:function(a){return b?b(a):null}}))})({findFiberByHostInstance:Ha,bundleType:0,version:"16.8.6",rendererPackageName:"react-dom"});var Wi={default:Vi},Xi=Wi&&Vi||Wi;module.exports=Xi.default||Xi;
 
-},{"object-assign":5,"react":14,"scheduler":19}],11:[function(require,module,exports){
+},{"object-assign":4,"react":13,"scheduler":18}],10:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -22503,7 +22480,7 @@ if (process.env.NODE_ENV === 'production') {
 
 }).call(this,require('_process'))
 
-},{"./cjs/react-dom.development.js":9,"./cjs/react-dom.production.min.js":10,"_process":6}],12:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":8,"./cjs/react-dom.production.min.js":9,"_process":5}],11:[function(require,module,exports){
 (function (process){
 /** @license React v16.8.6
  * react.development.js
@@ -24409,7 +24386,7 @@ module.exports = react;
 
 }).call(this,require('_process'))
 
-},{"_process":6,"object-assign":5,"prop-types/checkPropTypes":7}],13:[function(require,module,exports){
+},{"_process":5,"object-assign":4,"prop-types/checkPropTypes":6}],12:[function(require,module,exports){
 /** @license React v16.8.6
  * react.production.min.js
  *
@@ -24436,7 +24413,7 @@ b,d){return W().useImperativeHandle(a,b,d)},useDebugValue:function(){},useLayout
 b){void 0!==b.ref&&(h=b.ref,f=J.current);void 0!==b.key&&(g=""+b.key);var l=void 0;a.type&&a.type.defaultProps&&(l=a.type.defaultProps);for(c in b)K.call(b,c)&&!L.hasOwnProperty(c)&&(e[c]=void 0===b[c]&&void 0!==l?l[c]:b[c])}c=arguments.length-2;if(1===c)e.children=d;else if(1<c){l=Array(c);for(var m=0;m<c;m++)l[m]=arguments[m+2];e.children=l}return{$$typeof:p,type:a.type,key:g,ref:h,props:e,_owner:f}},createFactory:function(a){var b=M.bind(null,a);b.type=a;return b},isValidElement:N,version:"16.8.6",
 unstable_ConcurrentMode:x,unstable_Profiler:u,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentDispatcher:I,ReactCurrentOwner:J,assign:k}},Y={default:X},Z=Y&&X||Y;module.exports=Z.default||Z;
 
-},{"object-assign":5}],14:[function(require,module,exports){
+},{"object-assign":4}],13:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -24448,7 +24425,7 @@ if (process.env.NODE_ENV === 'production') {
 
 }).call(this,require('_process'))
 
-},{"./cjs/react.development.js":12,"./cjs/react.production.min.js":13,"_process":6}],15:[function(require,module,exports){
+},{"./cjs/react.development.js":11,"./cjs/react.production.min.js":12,"_process":5}],14:[function(require,module,exports){
 (function (process){
 /** @license React v0.13.6
  * scheduler-tracing.development.js
@@ -24876,7 +24853,7 @@ exports.unstable_unsubscribe = unstable_unsubscribe;
 
 }).call(this,require('_process'))
 
-},{"_process":6}],16:[function(require,module,exports){
+},{"_process":5}],15:[function(require,module,exports){
 /** @license React v0.13.6
  * scheduler-tracing.production.min.js
  *
@@ -24888,7 +24865,7 @@ exports.unstable_unsubscribe = unstable_unsubscribe;
 
 'use strict';Object.defineProperty(exports,"__esModule",{value:!0});var b=0;exports.__interactionsRef=null;exports.__subscriberRef=null;exports.unstable_clear=function(a){return a()};exports.unstable_getCurrent=function(){return null};exports.unstable_getThreadID=function(){return++b};exports.unstable_trace=function(a,d,c){return c()};exports.unstable_wrap=function(a){return a};exports.unstable_subscribe=function(){};exports.unstable_unsubscribe=function(){};
 
-},{}],17:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function (process,global){
 /** @license React v0.13.6
  * scheduler.development.js
@@ -25592,7 +25569,7 @@ exports.unstable_getFirstCallbackNode = unstable_getFirstCallbackNode;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":6}],18:[function(require,module,exports){
+},{"_process":5}],17:[function(require,module,exports){
 (function (global){
 /** @license React v0.13.6
  * scheduler.production.min.js
@@ -25618,7 +25595,7 @@ exports.unstable_shouldYield=function(){return!e&&(null!==d&&d.expirationTime<l|
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -25630,7 +25607,7 @@ if (process.env.NODE_ENV === 'production') {
 
 }).call(this,require('_process'))
 
-},{"./cjs/scheduler.development.js":17,"./cjs/scheduler.production.min.js":18,"_process":6}],20:[function(require,module,exports){
+},{"./cjs/scheduler.development.js":16,"./cjs/scheduler.production.min.js":17,"_process":5}],19:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -25642,5 +25619,5 @@ if (process.env.NODE_ENV === 'production') {
 
 }).call(this,require('_process'))
 
-},{"./cjs/scheduler-tracing.development.js":15,"./cjs/scheduler-tracing.production.min.js":16,"_process":6}]},{},[4])
+},{"./cjs/scheduler-tracing.development.js":14,"./cjs/scheduler-tracing.production.min.js":15,"_process":5}]},{},[3])
 

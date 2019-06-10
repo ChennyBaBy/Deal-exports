@@ -8,7 +8,9 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _functions = require("./functions");
+var _SavedDeals = _interopRequireDefault(require("./SavedDeals"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
@@ -22,42 +24,48 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var Data =
+var Deals =
 /*#__PURE__*/
 function (_Component) {
-  _inherits(Data, _Component);
+  _inherits(Deals, _Component);
 
-  function Data(props) {
+  function Deals(props) {
     var _this2;
 
-    _classCallCheck(this, Data);
+    _classCallCheck(this, Deals);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Data).call(this, props));
-    document.cookie = "deals=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Deals).call(this, props));
+    _this2.clearAll = _this2.clearAll.bind(_assertThisInitialized(_this2));
+    _this2.deleteDeal = _this2.deleteDeal.bind(_assertThisInitialized(_this2));
+    _this2.state = {
+      dealString: []
+    };
     return _this2;
   }
 
-  _createClass(Data, [{
+  _createClass(Deals, [{
     key: "saveDeal",
     value: function saveDeal() {
       var inputs = document.querySelectorAll("input");
       var value;
 
-      if ((0, _functions.checkCookie)()) {
-        value = (0, _functions.getCookie)("deals").slice(0, -1) + ", " + this.state.dealString.slice(1, this.state.dealString.length);
+      if (this.state.dealString) {
+        value = this.state.dealString.concat(this.state.deal);
       } else {
-        value = this.state.dealString;
+        value = this.state.deal;
       }
 
-      (0, _functions.setCookie)("deals", value, 15);
+      this.setState({
+        dealString: value
+      });
 
       for (var i = 0; i < inputs.length; i++) {
         inputs[i].value = "";
@@ -88,9 +96,7 @@ function (_Component) {
           });
 
           _this.setState({
-            inputTrue: true,
-            deal: data,
-            dealString: JSON.stringify(data)
+            deal: data
           });
         });
       }
@@ -224,9 +230,45 @@ function (_Component) {
       return blks;
     }
   }, {
+    key: "clearAll",
+    value: function clearAll() {
+      this.setState({
+        dealString: []
+      });
+    }
+  }, {
+    key: "deleteDeal",
+    value: function deleteDeal(i) {
+      var deals = this.state.dealString;
+      deals.splice(i, 1);
+      this.setState({
+        dealString: deals
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+        className: "sidebar__toggle"
+      }, _react["default"].createElement("button", {
+        className: "ch-btn"
+      }, "Menu ", _react["default"].createElement("i", {
+        className: "fa fa-bars"
+      }))), _react["default"].createElement("div", {
+        className: "sidebar ch-display--none"
+      }, _react["default"].createElement("div", {
+        className: "sidebar__header"
+      }, _react["default"].createElement("h3", {
+        className: "ch-mb--0"
+      }, "Menu"), _react["default"].createElement("button", {
+        className: "ch-btn ch-btn--sm"
+      }, "Close ", _react["default"].createElement("i", {
+        className: "fa fa-close"
+      }))), _react["default"].createElement(_SavedDeals["default"], {
+        saved: this.state.dealString,
+        clearAll: this.clearAll,
+        "delete": this.deleteDeal
+      })), _react["default"].createElement("div", {
         className: "form"
       }, _react["default"].createElement("div", {
         className: "ch-container"
@@ -236,56 +278,188 @@ function (_Component) {
     }
   }]);
 
-  return Data;
+  return Deals;
 }(_react.Component);
 
-var _default = Data;
+var _default = Deals;
 exports["default"] = _default;
 
-},{"./functions":2,"react":9}],2:[function(require,module,exports){
+},{"./SavedDeals":2,"react":9}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.checkCookie = checkCookie;
-exports.getCookie = getCookie;
-exports.setCookie = setCookie;
+exports["default"] = void 0;
 
-function checkCookie() {
-  var deals = getCookie("deals");
-  var cookieCheck = deals.length > 0 ? true : false;
-  return cookieCheck;
-}
+var _react = _interopRequireWildcard(require("react"));
 
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var SavedDeals =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(SavedDeals, _Component);
+
+  function SavedDeals(props) {
+    var _this;
+
+    _classCallCheck(this, SavedDeals);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(SavedDeals).call(this, props));
+    _this.jsonButton = _react["default"].createRef();
+    _this.csvButton = _react["default"].createRef();
+    _this.htmlButton = _react["default"].createRef();
+    _this.state = {
+      hasValue: false
+    };
+    return _this;
   }
+  /* Download button functions */
 
-  return "";
-}
 
-function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  var expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+  _createClass(SavedDeals, [{
+    key: "DownloadJSON2CSV",
+    value: function DownloadJSON2CSV(objArray) {
+      var array = _typeof(objArray) != "object" ? objArray : objArray;
+      var str = "Name, Spec, C02, MPG, Image, Monthly, Deposit, Months, USP" + "\r\n";
 
-},{}],3:[function(require,module,exports){
+      for (var i = 0; i < array.length; i++) {
+        var line = "";
+
+        for (var index in array[i]) {
+          line += array[i][index] + ",";
+        }
+
+        line.slice(0, line.Length - 1);
+        str += line + "\r\n";
+      }
+
+      var blob = new Blob([str], {
+        type: "text/csv"
+      });
+      var url = URL.createObjectURL(blob);
+      return url;
+    }
+  }, {
+    key: "createDownloadJSONButton",
+    value: function createDownloadJSONButton(data) {
+      var blob = new Blob([JSON.stringify(data)], {
+        type: "application/json"
+      });
+      var url = URL.createObjectURL(blob);
+      return url;
+    }
+  }, {
+    key: "downloadHTML",
+    value: function downloadHTML(data) {
+      var htmlurl = "#";
+
+      if (this.props.saved) {
+        data = data;
+        var str = "";
+
+        for (var i = 0; i < data.length; i++) {
+          str += "\n<table class=\"container bg-white\" bgcolor=\"#ffffff\">\n  <tr>\n    <td>\n      <table class=\"row row--white\">\n        <tr class=\"article\">\n          <td class=\"wrapper content\">\n            <table class=\"six columns article-image\">\n              <tr>\n                <td class=\"text-pad-left\">\n                  <center>\n                    <table class=\"row--white\">\n                      <tr>\n                        <td class=\"text-pad\">\n                          <img width=\"215\" label=\"Car image\" src=\"".concat(data[i].Image, "\" alt=\"").concat(data[i].Name, "\" class=\"center\"/>\n                        </td>\n                      </tr>\n                    </table>\n                  </center>\n                </td>\n              </tr>\n            </table>\n          </td>\n          <td class=\"wrapper content last\">\n            <table class=\"six columns article-image\">\n              <tr>\n                <td class=\"text-pad-right\">\n                  <center>\n                    <table class=\"row--white\">\n                      <tr>\n                        <td class=\"text-pad\">\n                          <h5 class=\"mobile-center make-model\">").concat(data[i].Name, "</h5>\n                          <p class=\"mobile-center variant\">").concat(data[i].Spec, "</p>\n                          <p class=\"mobile-center emissions\">").concat(data[i].MPG, " mpg | ").concat(data[i].C02, " g/km CO\u2082</p>\n                          <p class=\"from-price mobile-center\">First rental<br><strong><span class=\"from-price--number\">\xA3").concat(data[i].Deposit, "</span></strong></p>\n                          <p class=\"saving mobile-center\">Monthly rental<br><strong><span class=\"saving--number\">\xA3").concat(data[i].Monthly, "</span></strong></p>\n                          <a href=\"https://autocentre.acvm.com/cgi-bin/tools/?type=affinity\" class=\"blue-link mobile-center link\" color=\"#00a3e0\">Find out more</a>\n                        </td>\n                      </tr>\n                    </table>\n                  </center>\n                </td>\n                <td class=\"expander\"></td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n</table>\n\n<table class=\"container bg-white\" bgcolor=\"#ffffff\">\n  <tr>\n    <td>\n      <table class=\"row row--white\">\n        <tr>\n          <td class=\"wrapper content last\">\n            <table class=\"twelve columns\">\n              <tr>\n                <td class=\"text-pad\">\n                  <hr>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n</table>\n\n");
+        }
+
+        var htmlblob = new Blob([str], {
+          type: "text/html"
+        });
+        htmlurl = URL.createObjectURL(htmlblob);
+        return htmlurl;
+      }
+    }
+  }, {
+    key: "renderBlocks",
+    value: function renderBlocks() {
+      var _this2 = this;
+
+      var deals;
+
+      if (this.props.saved.length == 0) {
+        deals = _react["default"].createElement("p", {
+          className: "ch-mv--2"
+        }, "Add some deals");
+      } else {
+        var savedDeals = this.props.saved;
+        this.createDownloadJSONButton(savedDeals);
+        deals = savedDeals.map(function (deal, index) {
+          return _react["default"].createElement("div", {
+            className: "saved__deal",
+            key: index
+          }, _react["default"].createElement("div", {
+            className: "ch-mb--4 ch-ba--1 ch-bc--grey-3 ch-rounded ch-pa--2 sm:ch-pa--4 ch-bg--grey-1 ch-mv--2"
+          }, _react["default"].createElement("i", {
+            className: "deleteDeal fa fa-close ch-color--ac-magenta",
+            onClick: function onClick() {
+              return _this2.props["delete"](index);
+            }
+          }), _react["default"].createElement("h3", null, deal.Name), _react["default"].createElement("p", {
+            className: "ch-pb--0"
+          }, deal.Spec)));
+        });
+      }
+
+      return deals;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react["default"].createElement(_react["default"].Fragment, null, this.props.saved.length > 0 && _react["default"].createElement("p", {
+        className: "ch-mv--2 ch-text--right"
+      }, _react["default"].createElement("button", {
+        className: "ch-btn ch-btn--link",
+        onClick: this.props.clearAll
+      }, "Clear all")), this.renderBlocks(), this.props.saved.length > 0 && _react["default"].createElement("div", {
+        className: "ch-bt--1 ch-bc--grey-3 ch-mt--3 ch-pt--2"
+      }, _react["default"].createElement("a", {
+        ref: this.jsonButton,
+        href: this.createDownloadJSONButton(this.props.saved),
+        id: "genJSON",
+        className: "ch-mb--2 ch-btn ch-btn--success ch-display--block ch-text--center",
+        download: "affinity-deals.json"
+      }, "Generate JSON"), _react["default"].createElement("a", {
+        ref: this.csvButton,
+        href: this.DownloadJSON2CSV(this.props.saved),
+        id: "genCSV",
+        className: "ch-mb--2 ch-btn ch-btn--secondary ch-display--block ch-text--center",
+        download: "affinity-deals.csv"
+      }, "Generate CSV"), _react["default"].createElement("a", {
+        ref: this.htmlButton,
+        href: this.downloadHTML(this.props.saved),
+        id: "genEmail",
+        className: " ch-btn ch-btn--primary ch-display--block ch-text--center",
+        download: "affinity-deals.html"
+      }, "Generate HTML")));
+    }
+  }]);
+
+  return SavedDeals;
+}(_react.Component);
+
+var _default = SavedDeals;
+exports["default"] = _default;
+
+},{"react":9}],3:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus

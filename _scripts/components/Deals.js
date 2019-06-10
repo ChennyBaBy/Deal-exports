@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
-import { setCookie, getCookie, checkCookie } from './functions';
+import SavedDeals from './SavedDeals'
 
-class Data extends Component {
+class Deals extends Component {
   constructor(props) {
-    super(props);
-    document.cookie = "deals=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    super(props)
+    this.clearAll = this.clearAll.bind(this)
+    this.deleteDeal = this.deleteDeal.bind(this)
+    this.state = {
+      dealString: []
+    }
   }
 
   saveDeal() {
     let inputs = document.querySelectorAll("input")
     let value
-    if (checkCookie()) {
-      value = getCookie("deals").slice(0, -1) + ", " + this.state.dealString.slice(1, this.state.dealString.length)
-    }
-    else {
-      value = this.state.dealString
-    }
-    setCookie("deals", value, 15)
+    if (this.state.dealString) {
+      value = this.state.dealString.concat(this.state.deal)
+    } else { value = this.state.deal }
+
+    this.setState({
+      dealString: value
+    })
+
     for (let i = 0; i < inputs.length; i++) {
       inputs[i].value = "";
     }
@@ -45,9 +50,7 @@ class Data extends Component {
           }
         )
         _this.setState({
-          inputTrue: true,
-          deal: data,
-          dealString: JSON.stringify(data)
+          deal: data
         })
       })
     }
@@ -125,10 +128,30 @@ class Data extends Component {
     return blks
   }
 
+  clearAll() {
+    this.setState({ dealString: [] });
+  }
+
+  deleteDeal(i) {
+    let deals = this.state.dealString
+    deals.splice(i, 1);
+    this.setState({ dealString: deals });
+  }
+
 
   render() {
     return (
       <>
+        <div className="sidebar__toggle">
+          <button className="ch-btn">Menu <i className="fa fa-bars"></i></button>
+        </div>
+        <div className="sidebar ch-display--none">
+          <div className="sidebar__header">
+            <h3 className="ch-mb--0">Menu</h3>
+            <button className="ch-btn ch-btn--sm">Close <i className="fa fa-close"></i></button>
+          </div>
+          <SavedDeals saved={this.state.dealString} clearAll={this.clearAll} delete={this.deleteDeal} />
+        </div>
         <div className="form">
           <div className="ch-container">
             <div className="ch-row">
@@ -141,4 +164,4 @@ class Data extends Component {
   }
 }
 
-export default Data
+export default Deals
