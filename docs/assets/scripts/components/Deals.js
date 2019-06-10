@@ -10,6 +10,12 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _SavedDeals = _interopRequireDefault(require("./SavedDeals"));
 
+var _AcvmForm = _interopRequireDefault(require("./forms/AcvmForm"));
+
+var _AcForm = _interopRequireDefault(require("./forms/AcForm"));
+
+var _PchForm = _interopRequireDefault(require("./forms/PchForm"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
@@ -32,6 +38,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var Deals =
 /*#__PURE__*/
 function (_Component) {
@@ -43,10 +51,20 @@ function (_Component) {
     _classCallCheck(this, Deals);
 
     _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Deals).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_this2), "handleSwitch", function (e) {
+      _this2.setState({
+        type: e.target.value
+      }, function () {
+        return console.log(_this2.state.type);
+      });
+    });
+
     _this2.clearAll = _this2.clearAll.bind(_assertThisInitialized(_this2));
     _this2.deleteDeal = _this2.deleteDeal.bind(_assertThisInitialized(_this2));
     _this2.state = {
-      dealString: []
+      dealString: [],
+      type: "acvm"
     };
     return _this2;
   }
@@ -83,17 +101,30 @@ function (_Component) {
       for (var i = 0; i < inputs.length; i++) {
         inputs[i].addEventListener("input", function (e) {
           data.length = 0;
-          data.push({
-            "Name": document.querySelector("#name").value,
-            "Spec": document.querySelector("#variant").value,
-            "C02": document.querySelector("#c02").value,
-            "MPG": document.querySelector("#mpg").value,
-            "Image": document.querySelector("#image").value,
-            "Monthly": parseInt(document.querySelector("#monthly").value),
-            "Deposit": parseInt(document.querySelector("#deposit").value),
-            "Months": parseInt(document.querySelector("#months").value),
-            "USP": document.querySelector("#usp").value
-          });
+
+          if (this.state.type == "acvm") {
+            data.push({
+              "Name": document.querySelector("#name").value,
+              "Spec": document.querySelector("#variant").value,
+              "C02": document.querySelector("#c02").value,
+              "MPG": document.querySelector("#mpg").value,
+              "Image": document.querySelector("#image").value,
+              "Monthly": parseInt(document.querySelector("#monthly").value),
+              "Deposit": parseInt(document.querySelector("#deposit").value),
+              "Months": parseInt(document.querySelector("#months").value),
+              "USP": document.querySelector("#usp").value
+            });
+          } else if (this.state.type == "ac") {
+            data.push({
+              "Name": document.querySelector("#name").value,
+              "Spec": document.querySelector("#variant").value,
+              "Image": document.querySelector("#image").value,
+              "Monthly": parseInt(document.querySelector("#monthly").value),
+              "Deposit": parseInt(document.querySelector("#deposit").value),
+              "Months": parseInt(document.querySelector("#months").value),
+              "Saving": document.querySelector("#saving").value
+            });
+          }
 
           _this.setState({
             deal: data
@@ -112,115 +143,7 @@ function (_Component) {
         className: "sm:ch-col--12 md:ch-col--6 md:ch-col--offset-3 deal-block"
       }, _react["default"].createElement("div", {
         className: "ch-mb--4 ch-ba--1 ch-bc--grey-3 ch-rounded ch-pa--2 sm:ch-pa--4 ch-bg--grey-1"
-      }, _react["default"].createElement("h3", null, "Your deal"), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "name",
-        className: "ch-display--block ch-mb--0"
-      }, "Car name"), _react["default"].createElement("input", {
-        type: "text",
-        name: "Name",
-        id: "name",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "variant",
-        className: "ch-display--block ch-mb--0"
-      }, "Variant"), _react["default"].createElement("input", {
-        type: "text",
-        name: "Spec",
-        id: "variant",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "c02",
-        className: "ch-display--block ch-mb--0"
-      }, "C0\u2082"), _react["default"].createElement("input", {
-        type: "text",
-        name: "c02",
-        id: "c02",
-        className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "mpg",
-        className: "ch-display--block ch-mb--0"
-      }, "MPG"), _react["default"].createElement("input", {
-        type: "text",
-        name: "mpg",
-        id: "mpg",
-        className: "ch-display--block ch-form__control"
-      })))), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "deposit",
-        className: "ch-display--block ch-mb--0"
-      }, "Deposit (\xA3)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Deposit",
-        id: "deposit",
-        className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "monthly",
-        className: "ch-display--block ch-mb--0"
-      }, "Monthly (\xA3)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Monthly",
-        id: "monthly",
-        className: "ch-display--block ch-form__control"
-      })))), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "image",
-        className: "ch-display--block ch-mb--0"
-      }, "Image URL"), _react["default"].createElement("input", {
-        type: "text",
-        name: "Image",
-        id: "image",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "usp",
-        className: "ch-display--block ch-mb--0"
-      }, "USP"), _react["default"].createElement("input", {
-        type: "text",
-        name: "USP",
-        id: "usp",
-        className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "months",
-        className: "ch-display--block ch-mb--0"
-      }, "Term (months)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Months",
-        id: "months",
-        className: "ch-display--block ch-form__control"
-      })))), _react["default"].createElement("button", {
+      }, _react["default"].createElement("h3", null, "Your deal"), this.state.type == "acvm" && _react["default"].createElement(_AcvmForm["default"], null), this.state.type == "ac" && _react["default"].createElement(_AcForm["default"], null), this.state.type == "pch" && _react["default"].createElement(_PchForm["default"], null), _react["default"].createElement("button", {
         className: "ch-btn",
         onClick: function onClick(e) {
           return _this3.saveDeal();
@@ -244,11 +167,40 @@ function (_Component) {
       this.setState({
         dealString: deals
       });
-    }
+    } // Handle click function
+
   }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
       return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+        className: "typeSwitcher"
+      }, _react["default"].createElement("div", {
+        className: "ch-container"
+      }, _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "sm:ch-col--12 md:ch-col--6 md:ch-col--offset-3"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group"
+      }, _react["default"].createElement("label", {
+        htmlFor: "typeSwitch",
+        className: "ch-form__control-label"
+      }, "Deal type"), _react["default"].createElement("select", {
+        name: "typeSwitch",
+        className: "ch-form__control",
+        onChange: function onChange(e) {
+          return _this4.handleSwitch(e);
+        },
+        value: this.state.type
+      }, _react["default"].createElement("option", {
+        value: "acvm"
+      }, "ACVM"), _react["default"].createElement("option", {
+        value: "ac"
+      }, "Arnold Clark"), _react["default"].createElement("option", {
+        value: "pch"
+      }, "PCH"))))))), _react["default"].createElement("div", {
         className: "sidebar__toggle"
       }, _react["default"].createElement("button", {
         className: "ch-btn"
@@ -284,7 +236,7 @@ function (_Component) {
 var _default = Deals;
 exports["default"] = _default;
 
-},{"./SavedDeals":2,"react":9}],2:[function(require,module,exports){
+},{"./SavedDeals":2,"./forms/AcForm":3,"./forms/AcvmForm":4,"./forms/PchForm":5,"react":12}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -459,7 +411,461 @@ function (_Component) {
 var _default = SavedDeals;
 exports["default"] = _default;
 
-},{"react":9}],3:[function(require,module,exports){
+},{"react":12}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var AcForm =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(AcForm, _Component);
+
+  function AcForm() {
+    _classCallCheck(this, AcForm);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(AcForm).apply(this, arguments));
+  }
+
+  _createClass(AcForm, [{
+    key: "render",
+    value: function render() {
+      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "name",
+        className: "ch-display--block ch-mb--0"
+      }, "Car name"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Name",
+        id: "name",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "variant",
+        className: "ch-display--block ch-mb--0"
+      }, "Variant"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Spec",
+        id: "variant",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "deposit",
+        className: "ch-display--block ch-mb--0"
+      }, "Deposit (\xA3)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Deposit",
+        id: "deposit",
+        className: "ch-display--block ch-form__control"
+      }))), _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "monthly",
+        className: "ch-display--block ch-mb--0"
+      }, "Monthly (\xA3)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Monthly",
+        id: "monthly",
+        className: "ch-display--block ch-form__control"
+      })))), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "saving",
+        className: "ch-display--block ch-mb--0"
+      }, "Saving"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Saving",
+        id: "saving",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "image",
+        className: "ch-display--block ch-mb--0"
+      }, "Image URL"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Image",
+        id: "image",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "usp",
+        className: "ch-display--block ch-mb--0"
+      }, "USP"), _react["default"].createElement("input", {
+        type: "text",
+        name: "USP",
+        id: "usp",
+        className: "ch-display--block ch-form__control"
+      }))), _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "months",
+        className: "ch-display--block ch-mb--0"
+      }, "Term (months)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Months",
+        id: "months",
+        className: "ch-display--block ch-form__control"
+      })))));
+    }
+  }]);
+
+  return AcForm;
+}(_react.Component);
+
+var _default = AcForm;
+exports["default"] = _default;
+
+},{"react":12}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var AcvmForm =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(AcvmForm, _Component);
+
+  function AcvmForm() {
+    _classCallCheck(this, AcvmForm);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(AcvmForm).apply(this, arguments));
+  }
+
+  _createClass(AcvmForm, [{
+    key: "render",
+    value: function render() {
+      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "name",
+        className: "ch-display--block ch-mb--0"
+      }, "Car name"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Name",
+        id: "name",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "variant",
+        className: "ch-display--block ch-mb--0"
+      }, "Variant"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Spec",
+        id: "variant",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "c02",
+        className: "ch-display--block ch-mb--0"
+      }, "C0\u2082"), _react["default"].createElement("input", {
+        type: "text",
+        name: "c02",
+        id: "c02",
+        className: "ch-display--block ch-form__control"
+      }))), _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "mpg",
+        className: "ch-display--block ch-mb--0"
+      }, "MPG"), _react["default"].createElement("input", {
+        type: "text",
+        name: "mpg",
+        id: "mpg",
+        className: "ch-display--block ch-form__control"
+      })))), _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "deposit",
+        className: "ch-display--block ch-mb--0"
+      }, "Deposit (\xA3)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Deposit",
+        id: "deposit",
+        className: "ch-display--block ch-form__control"
+      }))), _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "monthly",
+        className: "ch-display--block ch-mb--0"
+      }, "Monthly (\xA3)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Monthly",
+        id: "monthly",
+        className: "ch-display--block ch-form__control"
+      })))), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "image",
+        className: "ch-display--block ch-mb--0"
+      }, "Image URL"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Image",
+        id: "image",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "usp",
+        className: "ch-display--block ch-mb--0"
+      }, "USP"), _react["default"].createElement("input", {
+        type: "text",
+        name: "USP",
+        id: "usp",
+        className: "ch-display--block ch-form__control"
+      }))), _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "months",
+        className: "ch-display--block ch-mb--0"
+      }, "Term (months)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Months",
+        id: "months",
+        className: "ch-display--block ch-form__control"
+      })))));
+    }
+  }]);
+
+  return AcvmForm;
+}(_react.Component);
+
+var _default = AcvmForm;
+exports["default"] = _default;
+
+},{"react":12}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var PchForm =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(PchForm, _Component);
+
+  function PchForm() {
+    _classCallCheck(this, PchForm);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(PchForm).apply(this, arguments));
+  }
+
+  _createClass(PchForm, [{
+    key: "render",
+    value: function render() {
+      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "name",
+        className: "ch-display--block ch-mb--0"
+      }, "Car name"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Name",
+        id: "name",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "variant",
+        className: "ch-display--block ch-mb--0"
+      }, "Variant"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Spec",
+        id: "variant",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "deposit",
+        className: "ch-display--block ch-mb--0"
+      }, "Deposit (\xA3)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Deposit",
+        id: "deposit",
+        className: "ch-display--block ch-form__control"
+      }))), _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "monthly",
+        className: "ch-display--block ch-mb--0"
+      }, "Monthly (\xA3)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Monthly",
+        id: "monthly",
+        className: "ch-display--block ch-form__control"
+      })))), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "saving",
+        className: "ch-display--block ch-mb--0"
+      }, "Saving"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Saving",
+        id: "saving",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "image",
+        className: "ch-display--block ch-mb--0"
+      }, "Image URL"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Image",
+        id: "image",
+        className: "ch-display--block ch-form__control"
+      })), _react["default"].createElement("div", {
+        className: "ch-row"
+      }, _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "usp",
+        className: "ch-display--block ch-mb--0"
+      }, "USP"), _react["default"].createElement("input", {
+        type: "text",
+        name: "USP",
+        id: "usp",
+        className: "ch-display--block ch-form__control"
+      }))), _react["default"].createElement("div", {
+        className: "xs:ch-col--6 ch-mh--0"
+      }, _react["default"].createElement("div", {
+        className: "ch-form__group ch-display--block"
+      }, _react["default"].createElement("label", {
+        htmlFor: "months",
+        className: "ch-display--block ch-mb--0"
+      }, "Term (months)"), _react["default"].createElement("input", {
+        type: "number",
+        name: "Months",
+        id: "months",
+        className: "ch-display--block ch-form__control"
+      })))));
+    }
+  }]);
+
+  return PchForm;
+}(_react.Component);
+
+var _default = PchForm;
+exports["default"] = _default;
+
+},{"react":12}],6:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -551,7 +957,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],4:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -737,7 +1143,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],5:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -844,7 +1250,7 @@ module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
 
-},{"./lib/ReactPropTypesSecret":6,"_process":4}],6:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":9,"_process":7}],9:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -858,7 +1264,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function (process){
 /** @license React v16.8.6
  * react.development.js
@@ -2764,7 +3170,7 @@ module.exports = react;
 
 }).call(this,require('_process'))
 
-},{"_process":4,"object-assign":3,"prop-types/checkPropTypes":5}],8:[function(require,module,exports){
+},{"_process":7,"object-assign":6,"prop-types/checkPropTypes":8}],11:[function(require,module,exports){
 /** @license React v16.8.6
  * react.production.min.js
  *
@@ -2791,7 +3197,7 @@ b,d){return W().useImperativeHandle(a,b,d)},useDebugValue:function(){},useLayout
 b){void 0!==b.ref&&(h=b.ref,f=J.current);void 0!==b.key&&(g=""+b.key);var l=void 0;a.type&&a.type.defaultProps&&(l=a.type.defaultProps);for(c in b)K.call(b,c)&&!L.hasOwnProperty(c)&&(e[c]=void 0===b[c]&&void 0!==l?l[c]:b[c])}c=arguments.length-2;if(1===c)e.children=d;else if(1<c){l=Array(c);for(var m=0;m<c;m++)l[m]=arguments[m+2];e.children=l}return{$$typeof:p,type:a.type,key:g,ref:h,props:e,_owner:f}},createFactory:function(a){var b=M.bind(null,a);b.type=a;return b},isValidElement:N,version:"16.8.6",
 unstable_ConcurrentMode:x,unstable_Profiler:u,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentDispatcher:I,ReactCurrentOwner:J,assign:k}},Y={default:X},Z=Y&&X||Y;module.exports=Z.default||Z;
 
-},{"object-assign":3}],9:[function(require,module,exports){
+},{"object-assign":6}],12:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2803,5 +3209,5 @@ if (process.env.NODE_ENV === 'production') {
 
 }).call(this,require('_process'))
 
-},{"./cjs/react.development.js":7,"./cjs/react.production.min.js":8,"_process":4}]},{},[1])
+},{"./cjs/react.development.js":10,"./cjs/react.production.min.js":11,"_process":7}]},{},[1])
 
