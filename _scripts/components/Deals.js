@@ -9,6 +9,7 @@ class Deals extends Component {
     super(props)
     this.clearAll = this.clearAll.bind(this)
     this.deleteDeal = this.deleteDeal.bind(this)
+    this.addData = this.addData.bind(this)
     this.state = {
       dealString: [],
       type: "acvm"
@@ -31,48 +32,67 @@ class Deals extends Component {
     }
   }
 
+  addData() {
+    let data = []
+    if (this.state.type == "acvm") {
+      data.push(
+        {
+          "Name": document.querySelector("#name").value,
+          "Spec": document.querySelector("#variant").value,
+          "C02": document.querySelector("#c02").value,
+          "MPG": document.querySelector("#mpg").value,
+          "Image": document.querySelector("#image").value,
+          "Monthly": parseInt(document.querySelector("#monthly").value),
+          "Deposit": parseInt(document.querySelector("#deposit").value),
+          "Months": parseInt(document.querySelector("#months").value),
+          "USP": document.querySelector("#usp").value
+        }
+      )
+    }
+
+    else if (this.state.type == "ac") {
+      data.push(
+        {
+          "Name": document.querySelector("#name").value,
+          "Spec": document.querySelector("#variant").value,
+          "Image": document.querySelector("#image").value,
+          "Monthly": parseInt(document.querySelector("#monthly").value),
+          "Deposit": parseInt(document.querySelector("#deposit").value),
+          "Saving": document.querySelector("#saving").value
+        }
+      )
+    }
+    else {
+      data.push(
+        {
+          "Name": document.querySelector("#name").value,
+          "Spec": document.querySelector("#variant").value,
+          "Image": document.querySelector("#image").value,
+          "Monthly": parseInt(document.querySelector("#monthly").value),
+          "Deposit": parseInt(document.querySelector("#deposit").value),
+          "VAT": parseInt(document.querySelector("#vat").value),
+          "Features": document.querySelector("#list").value
+        }
+      )
+    }
+    
+    this.setState({
+      deal: data
+    })
+  }
+  
+componentDidUpdate() {
+  let inputs = document.querySelectorAll("input")
+  for(let i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener("input", this.addData)
+  }
+}
+
   componentDidMount() {
     let inputs = document.querySelectorAll("input")
-    let _this = this
-    let data = []
-    
 
     for(let i = 0; i < inputs.length; i++) {
-      inputs[i].addEventListener("input", function(e) {
-        data.length = 0
-        if (this.state.type == "acvm") {
-          data.push(
-            {
-              "Name": document.querySelector("#name").value,
-              "Spec": document.querySelector("#variant").value,
-              "C02": document.querySelector("#c02").value,
-              "MPG": document.querySelector("#mpg").value,
-              "Image": document.querySelector("#image").value,
-              "Monthly": parseInt(document.querySelector("#monthly").value),
-              "Deposit": parseInt(document.querySelector("#deposit").value),
-              "Months": parseInt(document.querySelector("#months").value),
-              "USP": document.querySelector("#usp").value
-            }
-          )
-        }
-
-        else if (this.state.type == "ac") {
-          data.push(
-            {
-              "Name": document.querySelector("#name").value,
-              "Spec": document.querySelector("#variant").value,
-              "Image": document.querySelector("#image").value,
-              "Monthly": parseInt(document.querySelector("#monthly").value),
-              "Deposit": parseInt(document.querySelector("#deposit").value),
-              "Months": parseInt(document.querySelector("#months").value),
-              "Saving": document.querySelector("#saving").value
-            }
-          )
-        }
-        _this.setState({
-          deal: data
-        })
-      })
+      inputs[i].addEventListener("input", this.addData)
     }
   }
 
@@ -117,10 +137,10 @@ class Deals extends Component {
   handleSwitch = (e) => {
     this.setState({
       type: e.target.value,
-    }, () => console.log(this.state.type));
+      deal: [],
+      dealString: []
+    });
   }
-
-
 
   render() {
     return (

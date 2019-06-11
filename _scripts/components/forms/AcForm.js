@@ -34,20 +34,6 @@ class AcForm extends Component {
         <label htmlFor="image" className="ch-display--block ch-mb--0">Image URL</label>
         <input type="text" name="Image" id="image" className="ch-display--block ch-form__control" />
       </div>
-      <div className="ch-row">
-        <div className="xs:ch-col--6 ch-mh--0">
-          <div className="ch-form__group ch-display--block">
-            <label htmlFor="usp" className="ch-display--block ch-mb--0">USP</label>
-            <input type="text" name="USP" id="usp" className="ch-display--block ch-form__control" />
-          </div>
-        </div>
-        <div className="xs:ch-col--6 ch-mh--0">
-          <div className="ch-form__group ch-display--block">
-            <label htmlFor="months" className="ch-display--block ch-mb--0">Term (months)</label>
-            <input type="number" name="Months" id="months" className="ch-display--block ch-form__control" />
-          </div>
-        </div>
-        </div>
       </>
     );
   }

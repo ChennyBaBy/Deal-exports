@@ -108,33 +108,7 @@ function (_Component) {
         name: "Image",
         id: "image",
         className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "usp",
-        className: "ch-display--block ch-mb--0"
-      }, "USP"), _react["default"].createElement("input", {
-        type: "text",
-        name: "USP",
-        id: "usp",
-        className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "months",
-        className: "ch-display--block ch-mb--0"
-      }, "Term (months)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Months",
-        id: "months",
-        className: "ch-display--block ch-form__control"
-      })))));
+      })));
     }
   }]);
 

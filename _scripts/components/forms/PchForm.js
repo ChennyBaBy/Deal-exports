@@ -27,27 +27,17 @@ class PchForm extends Component {
         </div>
       </div>
       <div className="ch-form__group ch-display--block">
-        <label htmlFor="saving" className="ch-display--block ch-mb--0">Saving</label>
-        <input type="number" name="Saving" id="saving" className="ch-display--block ch-form__control" />
+        <label htmlFor="vat" className="ch-display--block ch-mb--0">VAT £</label>
+        <input type="number" name="VAT" id="vat" className="ch-display--block ch-form__control" />
       </div>
       <div className="ch-form__group ch-display--block">
         <label htmlFor="image" className="ch-display--block ch-mb--0">Image URL</label>
         <input type="text" name="Image" id="image" className="ch-display--block ch-form__control" />
       </div>
-      <div className="ch-row">
-        <div className="xs:ch-col--6 ch-mh--0">
-          <div className="ch-form__group ch-display--block">
-            <label htmlFor="usp" className="ch-display--block ch-mb--0">USP</label>
-            <input type="text" name="USP" id="usp" className="ch-display--block ch-form__control" />
-          </div>
-        </div>
-        <div className="xs:ch-col--6 ch-mh--0">
-          <div className="ch-form__group ch-display--block">
-            <label htmlFor="months" className="ch-display--block ch-mb--0">Term (months)</label>
-            <input type="number" name="Months" id="months" className="ch-display--block ch-form__control" />
-          </div>
-        </div>
-        </div>
+      <div className="ch-form__group ch-display--block">
+        <label htmlFor="list" className="ch-display--block ch-mb--0">Features (separate with commas)</label>
+        <input type="text" name="Features" id="list" className="ch-display--block ch-form__control" />
+      </div>
       </>
     );
   }

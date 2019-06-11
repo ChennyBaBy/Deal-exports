@@ -91,12 +91,12 @@ function (_Component) {
       })))), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "saving",
+        htmlFor: "vat",
         className: "ch-display--block ch-mb--0"
-      }, "Saving"), _react["default"].createElement("input", {
+      }, "VAT \xA3"), _react["default"].createElement("input", {
         type: "number",
-        name: "Saving",
-        id: "saving",
+        name: "VAT",
+        id: "vat",
         className: "ch-display--block ch-form__control"
       })), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
@@ -109,32 +109,16 @@ function (_Component) {
         id: "image",
         className: "ch-display--block ch-form__control"
       })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "usp",
+        htmlFor: "list",
         className: "ch-display--block ch-mb--0"
-      }, "USP"), _react["default"].createElement("input", {
+      }, "Features (separate with commas)"), _react["default"].createElement("input", {
         type: "text",
-        name: "USP",
-        id: "usp",
+        name: "Features",
+        id: "list",
         className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "months",
-        className: "ch-display--block ch-mb--0"
-      }, "Term (months)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Months",
-        id: "months",
-        className: "ch-display--block ch-form__control"
-      })))));
+      })));
     }
   }]);
 

@@ -2,6 +2,6 @@ name: Deals
 markdown: redcarpet
 highlighter: null # or rouge or null
 exclude: ["node_modules", "gulpfile.js", "package.json",  "README.md", "_scripts", "_scss", "gemfile", "Gemfile.lock"]
-url: "https://arnoldclark.github.io/Affinity-deals/"
+url: "https://arnoldclark.github.io/Deal-exports/"
 destination: docs
-baseurl: "/Affinity-deals"
+baseurl: "/Deal-exports"

@@ -46,27 +46,28 @@ function (_Component) {
   _inherits(Deals, _Component);
 
   function Deals(props) {
-    var _this2;
+    var _this;
 
     _classCallCheck(this, Deals);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Deals).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Deals).call(this, props));
 
-    _defineProperty(_assertThisInitialized(_this2), "handleSwitch", function (e) {
-      _this2.setState({
-        type: e.target.value
-      }, function () {
-        return console.log(_this2.state.type);
+    _defineProperty(_assertThisInitialized(_this), "handleSwitch", function (e) {
+      _this.setState({
+        type: e.target.value,
+        deal: [],
+        dealString: []
       });
     });
 
-    _this2.clearAll = _this2.clearAll.bind(_assertThisInitialized(_this2));
-    _this2.deleteDeal = _this2.deleteDeal.bind(_assertThisInitialized(_this2));
-    _this2.state = {
+    _this.clearAll = _this.clearAll.bind(_assertThisInitialized(_this));
+    _this.deleteDeal = _this.deleteDeal.bind(_assertThisInitialized(_this));
+    _this.addData = _this.addData.bind(_assertThisInitialized(_this));
+    _this.state = {
       dealString: [],
       type: "acvm"
     };
-    return _this2;
+    return _this;
   }
 
   _createClass(Deals, [{
@@ -90,46 +91,64 @@ function (_Component) {
       }
     }
   }, {
+    key: "addData",
+    value: function addData() {
+      var data = [];
+
+      if (this.state.type == "acvm") {
+        data.push({
+          "Name": document.querySelector("#name").value,
+          "Spec": document.querySelector("#variant").value,
+          "C02": document.querySelector("#c02").value,
+          "MPG": document.querySelector("#mpg").value,
+          "Image": document.querySelector("#image").value,
+          "Monthly": parseInt(document.querySelector("#monthly").value),
+          "Deposit": parseInt(document.querySelector("#deposit").value),
+          "Months": parseInt(document.querySelector("#months").value),
+          "USP": document.querySelector("#usp").value
+        });
+      } else if (this.state.type == "ac") {
+        data.push({
+          "Name": document.querySelector("#name").value,
+          "Spec": document.querySelector("#variant").value,
+          "Image": document.querySelector("#image").value,
+          "Monthly": parseInt(document.querySelector("#monthly").value),
+          "Deposit": parseInt(document.querySelector("#deposit").value),
+          "Saving": document.querySelector("#saving").value
+        });
+      } else {
+        data.push({
+          "Name": document.querySelector("#name").value,
+          "Spec": document.querySelector("#variant").value,
+          "Image": document.querySelector("#image").value,
+          "Monthly": parseInt(document.querySelector("#monthly").value),
+          "Deposit": parseInt(document.querySelector("#deposit").value),
+          "VAT": parseInt(document.querySelector("#vat").value),
+          "Features": document.querySelector("#list").value
+        });
+      }
+
+      console.log(data);
+      this.setState({
+        deal: data
+      });
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      var inputs = document.querySelectorAll("input");
+
+      for (var i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener("input", this.addData);
+      }
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       var inputs = document.querySelectorAll("input");
 
-      var _this = this;
-
-      var data = [];
-
       for (var i = 0; i < inputs.length; i++) {
-        inputs[i].addEventListener("input", function (e) {
-          data.length = 0;
-
-          if (this.state.type == "acvm") {
-            data.push({
-              "Name": document.querySelector("#name").value,
-              "Spec": document.querySelector("#variant").value,
-              "C02": document.querySelector("#c02").value,
-              "MPG": document.querySelector("#mpg").value,
-              "Image": document.querySelector("#image").value,
-              "Monthly": parseInt(document.querySelector("#monthly").value),
-              "Deposit": parseInt(document.querySelector("#deposit").value),
-              "Months": parseInt(document.querySelector("#months").value),
-              "USP": document.querySelector("#usp").value
-            });
-          } else if (this.state.type == "ac") {
-            data.push({
-              "Name": document.querySelector("#name").value,
-              "Spec": document.querySelector("#variant").value,
-              "Image": document.querySelector("#image").value,
-              "Monthly": parseInt(document.querySelector("#monthly").value),
-              "Deposit": parseInt(document.querySelector("#deposit").value),
-              "Months": parseInt(document.querySelector("#months").value),
-              "Saving": document.querySelector("#saving").value
-            });
-          }
-
-          _this.setState({
-            deal: data
-          });
-        });
+        inputs[i].addEventListener("input", this.addData);
       }
     }
     /* Render blocks function */
@@ -137,7 +156,7 @@ function (_Component) {
   }, {
     key: "renderBlocks",
     value: function renderBlocks() {
-      var _this3 = this;
+      var _this2 = this;
 
       var blks = _react["default"].createElement("div", {
         className: "sm:ch-col--12 md:ch-col--6 md:ch-col--offset-3 deal-block"
@@ -146,7 +165,7 @@ function (_Component) {
       }, _react["default"].createElement("h3", null, "Your deal"), this.state.type == "acvm" && _react["default"].createElement(_AcvmForm["default"], null), this.state.type == "ac" && _react["default"].createElement(_AcForm["default"], null), this.state.type == "pch" && _react["default"].createElement(_PchForm["default"], null), _react["default"].createElement("button", {
         className: "ch-btn",
         onClick: function onClick(e) {
-          return _this3.saveDeal();
+          return _this2.saveDeal();
         }
       }, "Save this deal")));
 
@@ -172,7 +191,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
         className: "typeSwitcher"
@@ -191,7 +210,7 @@ function (_Component) {
         name: "typeSwitch",
         className: "ch-form__control",
         onChange: function onChange(e) {
-          return _this4.handleSwitch(e);
+          return _this3.handleSwitch(e);
         },
         value: this.state.type
       }, _react["default"].createElement("option", {
@@ -521,33 +540,7 @@ function (_Component) {
         name: "Image",
         id: "image",
         className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "usp",
-        className: "ch-display--block ch-mb--0"
-      }, "USP"), _react["default"].createElement("input", {
-        type: "text",
-        name: "USP",
-        id: "usp",
-        className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "months",
-        className: "ch-display--block ch-mb--0"
-      }, "Term (months)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Months",
-        id: "months",
-        className: "ch-display--block ch-form__control"
-      })))));
+      })));
     }
   }]);
 
@@ -812,12 +805,12 @@ function (_Component) {
       })))), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "saving",
+        htmlFor: "vat",
         className: "ch-display--block ch-mb--0"
-      }, "Saving"), _react["default"].createElement("input", {
+      }, "VAT \xA3"), _react["default"].createElement("input", {
         type: "number",
-        name: "Saving",
-        id: "saving",
+        name: "VAT",
+        id: "vat",
         className: "ch-display--block ch-form__control"
       })), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
@@ -830,32 +823,16 @@ function (_Component) {
         id: "image",
         className: "ch-display--block ch-form__control"
       })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "usp",
+        htmlFor: "list",
         className: "ch-display--block ch-mb--0"
-      }, "USP"), _react["default"].createElement("input", {
+      }, "Features (separate with commas)"), _react["default"].createElement("input", {
         type: "text",
-        name: "USP",
-        id: "usp",
+        name: "Features",
+        id: "list",
         className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "months",
-        className: "ch-display--block ch-mb--0"
-      }, "Term (months)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Months",
-        id: "months",
-        className: "ch-display--block ch-form__control"
-      })))));
+      })));
     }
   }]);
 
