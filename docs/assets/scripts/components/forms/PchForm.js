@@ -47,7 +47,7 @@ function (_Component) {
       }, _react["default"].createElement("label", {
         htmlFor: "name",
         className: "ch-display--block ch-mb--0"
-      }, "Car name"), _react["default"].createElement("input", {
+      }, "Make & Model"), _react["default"].createElement("input", {
         type: "text",
         name: "Name",
         id: "name",
@@ -91,12 +91,12 @@ function (_Component) {
       })))), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "vat",
+        htmlFor: "enquiry",
         className: "ch-display--block ch-mb--0"
-      }, "VAT \xA3"), _react["default"].createElement("input", {
-        type: "number",
-        name: "VAT",
-        id: "vat",
+      }, "Enquiry URL"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Enquiry URL",
+        id: "enquiry",
         className: "ch-display--block ch-form__control"
       })), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"

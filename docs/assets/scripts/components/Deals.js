@@ -46,33 +46,38 @@ function (_Component) {
   _inherits(Deals, _Component);
 
   function Deals(props) {
-    var _this;
+    var _this2;
 
     _classCallCheck(this, Deals);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Deals).call(this, props));
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Deals).call(this, props));
 
-    _defineProperty(_assertThisInitialized(_this), "handleSwitch", function (e) {
-      _this.setState({
+    _defineProperty(_assertThisInitialized(_this2), "handleSwitch", function (e) {
+      _this2.setState({
         type: e.target.value,
         deal: [],
         dealString: []
       });
     });
 
-    _this.clearAll = _this.clearAll.bind(_assertThisInitialized(_this));
-    _this.deleteDeal = _this.deleteDeal.bind(_assertThisInitialized(_this));
-    _this.addData = _this.addData.bind(_assertThisInitialized(_this));
-    _this.state = {
+    _this2.clearAll = _this2.clearAll.bind(_assertThisInitialized(_this2));
+    _this2.deleteDeal = _this2.deleteDeal.bind(_assertThisInitialized(_this2));
+    _this2.addData = _this2.addData.bind(_assertThisInitialized(_this2));
+    _this2.state = {
       dealString: [],
-      type: "acvm"
+      type: "acvm",
+      deal: [],
+      loading: false,
+      error: false
     };
-    return _this;
+    return _this2;
   }
 
   _createClass(Deals, [{
     key: "saveDeal",
     value: function saveDeal() {
+      var _this3 = this;
+
       var inputs = document.querySelectorAll("input");
       var value;
 
@@ -84,6 +89,9 @@ function (_Component) {
 
       this.setState({
         dealString: value
+      }, function () {
+        console.log("In save():");
+        console.log(_this3.state.dealString);
       });
 
       for (var i = 0; i < inputs.length; i++) {
@@ -93,6 +101,10 @@ function (_Component) {
   }, {
     key: "addData",
     value: function addData() {
+      var _this4 = this;
+
+      var _this = this;
+
       var data = [];
 
       if (this.state.type == "acvm") {
@@ -102,19 +114,51 @@ function (_Component) {
           "C02": document.querySelector("#c02").value,
           "MPG": document.querySelector("#mpg").value,
           "Image": document.querySelector("#image").value,
-          "Monthly": parseInt(document.querySelector("#monthly").value),
-          "Deposit": parseInt(document.querySelector("#deposit").value),
-          "Months": parseInt(document.querySelector("#months").value),
+          "Monthly": document.querySelector("#monthly").value,
+          "Deposit": document.querySelector("#deposit").value,
+          "Months": document.querySelector("#months").value,
           "USP": document.querySelector("#usp").value
         });
+        this.setState({
+          deal: data
+        }, function () {
+          console.log("In push:");
+          console.log(_this4.state.deal);
+        });
       } else if (this.state.type == "ac") {
-        data.push({
-          "Name": document.querySelector("#name").value,
-          "Spec": document.querySelector("#variant").value,
-          "Image": document.querySelector("#image").value,
-          "Monthly": parseInt(document.querySelector("#monthly").value),
-          "Deposit": parseInt(document.querySelector("#deposit").value),
-          "Saving": document.querySelector("#saving").value
+        this.setState({
+          loading: true
+        }, function () {
+          fetch("https://cors.io/?" + document.querySelector("#url").value + '.json').then(function (response) {
+            if (response.status !== 200) {
+              console.log('Looks like there was a problem. Status Code: ' + response.status);
+              return;
+            } // Examine the text in the response
+
+
+            response.json().then(function (output) {
+              var data = [];
+              data.push({
+                "Origin": document.querySelector("#url").value,
+                "Name": "".concat(output.make, " ").concat(output.model),
+                "Spec": output.variant,
+                "Image": output.photos[0],
+                "URL": output.enquiryUrl,
+                "Monthly": output.pricing.monthlyPayment,
+                "Deposit": output.pricing.deposit
+              });
+
+              _this.setState({
+                deal: data,
+                loading: false,
+                error: false
+              });
+            });
+          })["catch"](function (err) {
+            _this.setState({
+              error: true
+            });
+          });
         });
       } else {
         data.push({
@@ -123,14 +167,15 @@ function (_Component) {
           "Image": document.querySelector("#image").value,
           "Monthly": parseInt(document.querySelector("#monthly").value),
           "Deposit": parseInt(document.querySelector("#deposit").value),
-          "VAT": parseInt(document.querySelector("#vat").value),
-          "Features": document.querySelector("#list").value
+          "Features": document.querySelector("#list").value.split(','),
+          "Enquiry": document.querySelector("#enquiry").value
+        });
+        this.setState({
+          deal: data
+        }, function () {
+          return console.log(_this4.state.deal);
         });
       }
-
-      this.setState({
-        deal: data
-      });
     }
   }, {
     key: "componentDidUpdate",
@@ -155,7 +200,7 @@ function (_Component) {
   }, {
     key: "renderBlocks",
     value: function renderBlocks() {
-      var _this2 = this;
+      var _this5 = this;
 
       var blks = _react["default"].createElement("div", {
         className: "sm:ch-col--12 md:ch-col--6 md:ch-col--offset-3 deal-block"
@@ -164,9 +209,10 @@ function (_Component) {
       }, _react["default"].createElement("h3", null, "Your deal"), this.state.type == "acvm" && _react["default"].createElement(_AcvmForm["default"], null), this.state.type == "ac" && _react["default"].createElement(_AcForm["default"], null), this.state.type == "pch" && _react["default"].createElement(_PchForm["default"], null), _react["default"].createElement("button", {
         className: "ch-btn",
         onClick: function onClick(e) {
-          return _this2.saveDeal();
-        }
-      }, "Save this deal")));
+          return _this5.saveDeal();
+        },
+        disabled: this.state.loading
+      }, "Save this deal"), this.state.error && _react["default"].createElement("p", null, "Please enter a full URL, the data fetching is quite tempramental so if you can't click the button above then try again in 5 minutes \uD83D\uDC7E")));
 
       return blks;
     }
@@ -190,7 +236,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this6 = this;
 
       return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
         className: "typeSwitcher"
@@ -209,7 +255,7 @@ function (_Component) {
         name: "typeSwitch",
         className: "ch-form__control",
         onChange: function onChange(e) {
-          return _this3.handleSwitch(e);
+          return _this6.handleSwitch(e);
         },
         value: this.state.type
       }, _react["default"].createElement("option", {
@@ -237,7 +283,8 @@ function (_Component) {
       }))), _react["default"].createElement(_SavedDeals["default"], {
         saved: this.state.dealString,
         clearAll: this.clearAll,
-        "delete": this.deleteDeal
+        "delete": this.deleteDeal,
+        type: this.state.type
       })), _react["default"].createElement("div", {
         className: "form"
       }, _react["default"].createElement("div", {
@@ -310,7 +357,8 @@ function (_Component) {
     key: "DownloadJSON2CSV",
     value: function DownloadJSON2CSV(objArray) {
       var array = _typeof(objArray) != "object" ? objArray : objArray;
-      var str = "Name, Spec, C02, MPG, Image, Monthly, Deposit, Months, USP" + "\r\n";
+      var keys = Object.keys(objArray[0]);
+      var str = keys.toString() + "\r\n";
 
       for (var i = 0; i < array.length; i++) {
         var line = "";
@@ -370,9 +418,8 @@ function (_Component) {
           className: "ch-mv--2"
         }, "Add some deals");
       } else {
-        var savedDeals = this.props.saved;
-        this.createDownloadJSONButton(savedDeals);
-        deals = savedDeals.map(function (deal, index) {
+        this.createDownloadJSONButton(this.props.saved);
+        deals = this.props.saved.map(function (deal, index) {
           return _react["default"].createElement("div", {
             className: "saved__deal",
             key: index
@@ -476,68 +523,12 @@ function (_Component) {
       return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "name",
+        htmlFor: "url",
         className: "ch-display--block ch-mb--0"
-      }, "Car name"), _react["default"].createElement("input", {
+      }, "AC Deal URL"), _react["default"].createElement("input", {
         type: "text",
-        name: "Name",
-        id: "name",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "variant",
-        className: "ch-display--block ch-mb--0"
-      }, "Variant"), _react["default"].createElement("input", {
-        type: "text",
-        name: "Spec",
-        id: "variant",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "deposit",
-        className: "ch-display--block ch-mb--0"
-      }, "Deposit (\xA3)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Deposit",
-        id: "deposit",
-        className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "monthly",
-        className: "ch-display--block ch-mb--0"
-      }, "Monthly (\xA3)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Monthly",
-        id: "monthly",
-        className: "ch-display--block ch-form__control"
-      })))), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "saving",
-        className: "ch-display--block ch-mb--0"
-      }, "Saving"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Saving",
-        id: "saving",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "image",
-        className: "ch-display--block ch-mb--0"
-      }, "Image URL"), _react["default"].createElement("input", {
-        type: "text",
-        name: "Image",
-        id: "image",
+        name: "url",
+        id: "url",
         className: "ch-display--block ch-form__control"
       })));
     }
@@ -598,7 +589,7 @@ function (_Component) {
       }, _react["default"].createElement("label", {
         htmlFor: "name",
         className: "ch-display--block ch-mb--0"
-      }, "Car name"), _react["default"].createElement("input", {
+      }, "Make & Model"), _react["default"].createElement("input", {
         type: "text",
         name: "Name",
         id: "name",
@@ -760,7 +751,7 @@ function (_Component) {
       }, _react["default"].createElement("label", {
         htmlFor: "name",
         className: "ch-display--block ch-mb--0"
-      }, "Car name"), _react["default"].createElement("input", {
+      }, "Make & Model"), _react["default"].createElement("input", {
         type: "text",
         name: "Name",
         id: "name",
@@ -804,12 +795,12 @@ function (_Component) {
       })))), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "vat",
+        htmlFor: "enquiry",
         className: "ch-display--block ch-mb--0"
-      }, "VAT \xA3"), _react["default"].createElement("input", {
-        type: "number",
-        name: "VAT",
-        id: "vat",
+      }, "Enquiry URL"), _react["default"].createElement("input", {
+        type: "text",
+        name: "Enquiry URL",
+        id: "enquiry",
         className: "ch-display--block ch-form__control"
       })), _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"

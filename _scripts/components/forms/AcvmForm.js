@@ -5,7 +5,7 @@ class AcvmForm extends Component {
     return (
     <>
       <div className="ch-form__group ch-display--block">
-        <label htmlFor="name" className="ch-display--block ch-mb--0">Car name</label>
+        <label htmlFor="name" className="ch-display--block ch-mb--0">Make & Model</label>
         <input type="text" name="Name" id="name" className="ch-display--block ch-form__control" />
       </div>
       <div className="ch-form__group ch-display--block">

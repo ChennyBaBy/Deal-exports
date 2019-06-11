@@ -14,8 +14,9 @@ class SavedDeals extends Component {
   /* Download button functions */
   DownloadJSON2CSV(objArray) {
     let array = typeof objArray != "object" ? objArray : objArray;
+    let keys = Object.keys(objArray[0])
     let str =
-      "Name, Spec, C02, MPG, Image, Monthly, Deposit, Months, USP" + "\r\n";
+      keys.toString() + "\r\n";
 
     for (let i = 0; i < array.length; i++) {
       let line = "";
@@ -151,9 +152,8 @@ class SavedDeals extends Component {
     if (this.props.saved.length == 0) {
       deals = <p className="ch-mv--2">Add some deals</p>;
     } else {
-      const savedDeals = this.props.saved;
-      this.createDownloadJSONButton(savedDeals);
-      deals = savedDeals.map((deal, index) => (
+      this.createDownloadJSONButton(this.props.saved);
+      deals = this.props.saved.map((deal, index) => (
         <div className="saved__deal" key={index}>
           <div className="ch-mb--4 ch-ba--1 ch-bc--grey-3 ch-rounded ch-pa--2 sm:ch-pa--4 ch-bg--grey-1 ch-mv--2">
             <i className="deleteDeal fa fa-close ch-color--ac-magenta" onClick={() => this.props.delete(index)} />
@@ -195,15 +195,17 @@ class SavedDeals extends Component {
             >
               Generate CSV
             </a>
-            <a
-              ref={this.htmlButton}
-              href={this.downloadHTML(this.props.saved)}
-              id="genEmail"
-              className=" ch-btn ch-btn--primary ch-display--block ch-text--center"
-              download="affinity-deals.html"
-            >
-              Generate HTML
-            </a>
+            {this.props.type == "acvm" &&
+              <a
+                ref={this.htmlButton}
+                href={this.downloadHTML(this.props.saved)}
+                id="genEmail"
+                className=" ch-btn ch-btn--primary ch-display--block ch-text--center"
+                download="affinity-deals.html"
+              >
+                Generate HTML
+              </a>
+            }
           </div>
         )}
       </>

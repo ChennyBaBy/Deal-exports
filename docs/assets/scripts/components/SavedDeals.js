@@ -54,7 +54,8 @@ function (_Component) {
     key: "DownloadJSON2CSV",
     value: function DownloadJSON2CSV(objArray) {
       var array = _typeof(objArray) != "object" ? objArray : objArray;
-      var str = "Name, Spec, C02, MPG, Image, Monthly, Deposit, Months, USP" + "\r\n";
+      var keys = Object.keys(objArray[0]);
+      var str = keys.toString() + "\r\n";
 
       for (var i = 0; i < array.length; i++) {
         var line = "";
@@ -114,9 +115,8 @@ function (_Component) {
           className: "ch-mv--2"
         }, "Add some deals");
       } else {
-        var savedDeals = this.props.saved;
-        this.createDownloadJSONButton(savedDeals);
-        deals = savedDeals.map(function (deal, index) {
+        this.createDownloadJSONButton(this.props.saved);
+        deals = this.props.saved.map(function (deal, index) {
           return _react["default"].createElement("div", {
             className: "saved__deal",
             key: index
@@ -157,7 +157,7 @@ function (_Component) {
         id: "genCSV",
         className: "ch-mb--2 ch-btn ch-btn--secondary ch-display--block ch-text--center",
         download: "affinity-deals.csv"
-      }, "Generate CSV"), _react["default"].createElement("a", {
+      }, "Generate CSV"), this.props.type == "acvm" && _react["default"].createElement("a", {
         ref: this.htmlButton,
         href: this.downloadHTML(this.props.saved),
         id: "genEmail",

@@ -47,7 +47,7 @@ function (_Component) {
       }, _react["default"].createElement("label", {
         htmlFor: "name",
         className: "ch-display--block ch-mb--0"
-      }, "Car name"), _react["default"].createElement("input", {
+      }, "Make & Model"), _react["default"].createElement("input", {
         type: "text",
         name: "Name",
         id: "name",

@@ -12,7 +12,10 @@ class Deals extends Component {
     this.addData = this.addData.bind(this)
     this.state = {
       dealString: [],
-      type: "acvm"
+      type: "acvm",
+      deal: [],
+      loading: false,
+      error: false
     }
   }
 
@@ -25,6 +28,9 @@ class Deals extends Component {
 
     this.setState({
       dealString: value
+    }, () => {
+      console.log("In save():")
+      console.log(this.state.dealString)
     })
 
     for (let i = 0; i < inputs.length; i++) {
@@ -33,6 +39,7 @@ class Deals extends Component {
   }
 
   addData() {
+    let _this = this
     let data = []
     if (this.state.type == "acvm") {
       data.push(
@@ -42,25 +49,62 @@ class Deals extends Component {
           "C02": document.querySelector("#c02").value,
           "MPG": document.querySelector("#mpg").value,
           "Image": document.querySelector("#image").value,
-          "Monthly": parseInt(document.querySelector("#monthly").value),
-          "Deposit": parseInt(document.querySelector("#deposit").value),
-          "Months": parseInt(document.querySelector("#months").value),
+          "Monthly": document.querySelector("#monthly").value,
+          "Deposit": document.querySelector("#deposit").value,
+          "Months": document.querySelector("#months").value,
           "USP": document.querySelector("#usp").value
         }
       )
+
+      this.setState({
+        deal: data
+      }, () => {
+        console.log("In push:")
+        console.log(this.state.deal)
+      })
     }
 
     else if (this.state.type == "ac") {
-      data.push(
-        {
-          "Name": document.querySelector("#name").value,
-          "Spec": document.querySelector("#variant").value,
-          "Image": document.querySelector("#image").value,
-          "Monthly": parseInt(document.querySelector("#monthly").value),
-          "Deposit": parseInt(document.querySelector("#deposit").value),
-          "Saving": document.querySelector("#saving").value
-        }
-      )
+      this.setState({
+        loading: true
+      }, () => {
+        fetch("https://cors.io/?" + document.querySelector("#url").value + '.json')
+          .then(
+            function (response) {
+              if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                  response.status);
+                return;
+              }
+
+              // Examine the text in the response
+              response.json().then(function (output) {
+                let data = []
+                data.push(
+                  {
+                    "Origin": document.querySelector("#url").value,
+                    "Name": `${output.make} ${output.model}`,
+                    "Spec": output.variant,
+                    "Image": output.photos[0],
+                    "URL": output.enquiryUrl,
+                    "Monthly": output.pricing.monthlyPayment,
+                    "Deposit": output.pricing.deposit,
+                  }
+                )
+                _this.setState({
+                  deal: data,
+                  loading: false,
+                  error: false
+                })
+              });
+            }
+          )
+          .catch(function (err) {
+            _this.setState({
+              error: true
+            })
+          });
+      });
     }
     else {
       data.push(
@@ -70,15 +114,14 @@ class Deals extends Component {
           "Image": document.querySelector("#image").value,
           "Monthly": parseInt(document.querySelector("#monthly").value),
           "Deposit": parseInt(document.querySelector("#deposit").value),
-          "VAT": parseInt(document.querySelector("#vat").value),
-          "Features": document.querySelector("#list").value
+          "Features": document.querySelector("#list").value.split(','),
+          "Enquiry": document.querySelector("#enquiry").value
         }
       )
+      this.setState({
+        deal: data
+      }, () => console.log(this.state.deal))
     }
-    
-    this.setState({
-      deal: data
-    })
   }
   
 componentDidUpdate() {
@@ -114,9 +157,13 @@ componentDidUpdate() {
           <button
             className="ch-btn"
             onClick={e => this.saveDeal()}
+            disabled={this.state.loading}
           >
             Save this deal
           </button>
+          {this.state.error &&
+          <p>Please enter a full URL, the data fetching is quite tempramental so if you can't click the button above then try again in 5 minutes 👾</p>
+          }
         </div>
       </div>
     )
@@ -169,7 +216,7 @@ componentDidUpdate() {
             <h3 className="ch-mb--0">Menu</h3>
             <button className="ch-btn ch-btn--sm">Close <i className="fa fa-close"></i></button>
           </div>
-          <SavedDeals saved={this.state.dealString} clearAll={this.clearAll} delete={this.deleteDeal} />
+          <SavedDeals saved={this.state.dealString} clearAll={this.clearAll} delete={this.deleteDeal} type={this.state.type} />
         </div>
         <div className="form">
           <div className="ch-container">

@@ -45,68 +45,12 @@ function (_Component) {
       return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
         className: "ch-form__group ch-display--block"
       }, _react["default"].createElement("label", {
-        htmlFor: "name",
+        htmlFor: "url",
         className: "ch-display--block ch-mb--0"
-      }, "Car name"), _react["default"].createElement("input", {
+      }, "AC Deal URL"), _react["default"].createElement("input", {
         type: "text",
-        name: "Name",
-        id: "name",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "variant",
-        className: "ch-display--block ch-mb--0"
-      }, "Variant"), _react["default"].createElement("input", {
-        type: "text",
-        name: "Spec",
-        id: "variant",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-row"
-      }, _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "deposit",
-        className: "ch-display--block ch-mb--0"
-      }, "Deposit (\xA3)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Deposit",
-        id: "deposit",
-        className: "ch-display--block ch-form__control"
-      }))), _react["default"].createElement("div", {
-        className: "xs:ch-col--6 ch-mh--0"
-      }, _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "monthly",
-        className: "ch-display--block ch-mb--0"
-      }, "Monthly (\xA3)"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Monthly",
-        id: "monthly",
-        className: "ch-display--block ch-form__control"
-      })))), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "saving",
-        className: "ch-display--block ch-mb--0"
-      }, "Saving"), _react["default"].createElement("input", {
-        type: "number",
-        name: "Saving",
-        id: "saving",
-        className: "ch-display--block ch-form__control"
-      })), _react["default"].createElement("div", {
-        className: "ch-form__group ch-display--block"
-      }, _react["default"].createElement("label", {
-        htmlFor: "image",
-        className: "ch-display--block ch-mb--0"
-      }, "Image URL"), _react["default"].createElement("input", {
-        type: "text",
-        name: "Image",
-        id: "image",
+        name: "url",
+        id: "url",
         className: "ch-display--block ch-form__control"
       })));
     }

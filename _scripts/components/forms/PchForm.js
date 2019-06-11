@@ -5,7 +5,7 @@ class PchForm extends Component {
     return (
     <>
       <div className="ch-form__group ch-display--block">
-        <label htmlFor="name" className="ch-display--block ch-mb--0">Car name</label>
+        <label htmlFor="name" className="ch-display--block ch-mb--0">Make & Model</label>
         <input type="text" name="Name" id="name" className="ch-display--block ch-form__control" />
       </div>
       <div className="ch-form__group ch-display--block">
@@ -27,8 +27,8 @@ class PchForm extends Component {
         </div>
       </div>
       <div className="ch-form__group ch-display--block">
-        <label htmlFor="vat" className="ch-display--block ch-mb--0">VAT £</label>
-        <input type="number" name="VAT" id="vat" className="ch-display--block ch-form__control" />
+        <label htmlFor="enquiry" className="ch-display--block ch-mb--0">Enquiry URL</label>
+        <input type="text" name="Enquiry URL" id="enquiry" className="ch-display--block ch-form__control" />
       </div>
       <div className="ch-form__group ch-display--block">
         <label htmlFor="image" className="ch-display--block ch-mb--0">Image URL</label>
