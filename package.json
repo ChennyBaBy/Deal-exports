@@ -19,7 +19,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-core": "^6.26.3",
     "babelify": "^10.0.0",
-    "browser-sync": "^2.24.6",
+    "browser-sync": "^2.29.3",
     "browserify": "*",
     "eslint-config-airbnb-relaxed": "^0.2.0",
     "gulp": "^4.0.0",
