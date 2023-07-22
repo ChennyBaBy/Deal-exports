@@ -50,7 +50,7 @@
     "browsersync"
   ],
   "dependencies": {
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.3.1",
     "express": "^4.16.4",
     "gulp-mamp": "0.0.5",
     "popper.js": "^1.14.1",
